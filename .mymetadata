@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-module
   type="WEB"
-  name="projectDemo"
+  name="KPArchiveMIS"
   id="myeclipse.1467813601820"
   context-root="/projectDemo"
   j2ee-spec="5.0"
-  archive="projectDemo.war">
+  archive="KPArchiveMIS.war">
   <attributes>
     <attribute name="webrootdir" value="WebRoot" />
   </attributes>

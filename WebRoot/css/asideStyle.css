@@ -8,6 +8,7 @@ aside{
 }
 aside .header{overflow: hidden;border-bottom: 1px solid #777; padding: 0 10px 5px 10px;}
 aside .header h2{float:left;margin-bottom: 10px;}
+aside li{cursor: pointer;}
 .changefile  span{
     cursor: pointer;
     float: right;
@@ -33,32 +34,26 @@ aside #searchform #searchbt{
     border-radius: 1em;
 }
 aside #searchform .search-term{width:170px;}
-.appendlist{padding:0;margin: 0;border-bottom: 1px solid #777;}
+.appendlist{padding:5px 0;margin: 0;border-bottom: 1px solid #777;overflow: hidden;}
 .appendlist>li{
-    margin: 5px 3px;
+    margin: 3px 10px;
     padding: 0 10px;
-    background-color: #ddd;
-    border-radius: 10px;
     display: inline-block;
     height: 20px;
     line-height: 20px;
+    color: #000;
 }
-.appendlist>li:hover{ background-color: #fff;}
+.appendlist>li::before{content:"";width:20px;height:22px;line-height:22px;display:inline-block;}
+.appendlist>li:nth-child(1)::before{ background:url("images/icons/folder-add.png") 2px 8px no-repeat;}
+.appendlist>li:nth-child(2)::before{ background:url("images/icons/folder-add.png") 2px 8px no-repeat;}
+.appendlist>li:nth-child(3)::before{ background:url("images/icons/delete.png") 2px 8px no-repeat;}
+.appendlist>li:nth-child(4)::before{ background:url("images/icons/edit.png") 2px 8px no-repeat;}
+.appendlist>li:nth-child(5)::before{ background:url("images/icons/move-up.png") 2px 8px no-repeat;}
+.appendlist>li:nth-child(6)::before{ background:url("images/icons/move-down.png") 2px 8px no-repeat;}
 
-#editcontent{
-    display: none;
-}
-/*.appendlist a{color: #333;margin-left: 18px;}
-.appendlist a::before{
-    content: "";
-    display: block;
-    position: absolute;
-    top: 2px;
-    width: 16px;
-    height: 16px;
-    background: url("../images/files.png") 0 0;
-    background-size: 16px 50px; 
-}*/
+
+
+
 .selected{background-color: #ccc;}
 #allFile{
     padding: 10px 0 0 20px;
@@ -71,15 +66,22 @@ aside #searchform .search-term{width:170px;}
     user-select: none;
 }
 #allFile li{line-height:20px;}
+#allFile li >.file{    
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width :100px;
+    white-space: nowrap;
+    display: inline-block;
+}
 .searchFilebox,.downfile{display: none;}
 
 .downfile{
 	line-height: 100%;
-	height: 10px;
+	height: 16px;
 	float: right;
-	width: 10px;
+	width: 16px;
 	margin:5px 5px 0 0;
-	background:url("images/sort_desc.gif");
+	background:url("images/sort_desc.gif")3px 5px no-repeat;
 	background-size:10px 10px;
 }
 #searchFile li:hover>.downfile,#allFile li:hover>.downfile{display:block;}
@@ -90,6 +92,6 @@ aside #searchform .search-term{width:170px;}
     text-align: center;
     list-style: none;
 }
-#searchFile li{cursor: pointer;}
+
 #searchFile li:hover,#allFile>li:hover{background: rgba(210,210,210,0.5);}
 .alertconfim{display: none;}

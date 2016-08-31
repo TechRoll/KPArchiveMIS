@@ -11,16 +11,24 @@ $(document).ready(function() {
             //$("#register").attr("disabled",false);
         }
     };
+    
+    var passwdReg = /^[a-z0-9]{8,15}$/i;  //密码的正则表达式（长度为8-15位，由数字字母组成）
     var pwdlgh = function () {
-    	if($("#password").val().length<6) {      //密码长度是否少于6？
+    	
+    	//if($("#password").val().length<6) {      //密码长度是否少于6？
+    	if(!passwdReg.test($("#password").val())){
     		$("#pwdLength").show();
     	} else {
     		$("#pwdLength").hide();
     		//$("#register").attr("disabled",false);
     	}
     };
+    
+    var userIdReg = /^[a-z0-9]{6,13}$/i;   //帐号由6-13位数字和字母组成
     var userlgh = function () {
-    	if($("#userId").val().length<6 || isNaN($("#userId").val())) {     //账号长度是否少于6？
+    	
+    	//if($("#userId").val().length<6 || isNaN($("#userId").val())) {     //账号长度是否少于6？
+    	if(!userIdReg.test($("#userId").val())){
     		$("#userLength").show();
     	} else {
     		$("#userLength").hide();
@@ -32,7 +40,8 @@ $(document).ready(function() {
    $("#password").change(pwdlgh);
    $("#userId").change(userlgh);
    $("#register").click(function(){
-	   if($("#password").val()==$("#passwordAgin").val() && $("#password").val().length>=6 && $("#userId").val().length>=6 && !isNaN($("#userId").val())) {
+	  //if($("#password").val()==$("#passwordAgin").val() && $("#password").val().length>=6 && $("#userId").val().length>=6 && !isNaN($("#userId").val())) {
+	   if($("#password").val()==$("#passwordAgin").val() && passwdReg.test($("#password").val()) && userIdReg.test($("#userId").val())) {
 		   //$("#register").attr("disabled",true);
 		   //document.registerForm.submit();
 		   $.post("Register",
@@ -43,7 +52,7 @@ $(document).ready(function() {
     	            	if(status){
     	            		if(data=="auditPass"){
     	            			alert("注册成功！");
-    	            			window.location="login.jsp";
+    	            			window.parent.$("#registerPage").dialog('close');
     	            		} else {
     	            			//alert(data);
     	            			$("#errorPut").text(data);

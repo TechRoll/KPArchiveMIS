@@ -81,8 +81,9 @@ public class OperationFileInfo {
 
 		Fileinfo ff = (Fileinfo) session.get(Fileinfo.class, id);
 		// 建立返回的数组
+		
 		String[] json = { ff.getFileTitle(), ff.getTimePath(),
-				ff.getRealPath(), ff.getFileDelete().toString() };
+				ff.getRealPath() ,ff.getFileDelete().toString()};
 
 		transaction.commit();
 		session.close();
@@ -133,7 +134,55 @@ public class OperationFileInfo {
 
 		return t.getFileId();
 	}
+	//删除数据 `fileDelete`设为1
+	public static void DeleteFiles(String [] ids){
+		session = sessionFactory.openSession();
+		transaction = session.beginTransaction();
+		
+		for (int i = 0; i < ids.length; i++) {
+			
+			Fileinfo def = (Fileinfo) session.get(Fileinfo.class, Integer.parseInt(ids[i]));
+			def.setFileDelete(1);
+			session.save(def);
+		}
+		transaction.commit();
+		session.close();
+	}
+	/**
+	 * 重命名文件
+	 * @param newname	新文件名字
+	 * @param id		数据库编号
+	 * @param savePath	存储路径
+	 */
+	public static String FileRename(String newname,int id,String savePath){
+		session = sessionFactory.openSession();
+		transaction = session.beginTransaction();
+		
+		Fileinfo namef = (Fileinfo) session.get(Fileinfo.class, id);
+		File oldfile=new File(savePath+"/"+namef.getRealPath()); 
+		
+		
+		namef.setFileTitle(newname);
+		
+		newname+=namef.getFileName().substring(namef.getFileName().indexOf("."));
+		
+		namef.setFileName(newname);	
+		 
+		newname=namef.getRealPath().substring(0,namef.getRealPath().lastIndexOf("/")+1)+newname;
+		
+		namef.setRealPath(newname);
 
+		
+		File newfile=new File(savePath+"/"+newname); 
+		
+		oldfile.renameTo(newfile);
+		
+		session.save(namef);
+		transaction.commit();
+		session.close();
+		
+		return namef.getRealPath();
+	}
 	// 这个main用于方法测试
 	public static void main(String args[]) {
 

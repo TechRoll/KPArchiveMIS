@@ -20,7 +20,7 @@ $(function () {
 		    url:'QueryList',
 		    data:"grade="+grade,
 		    success: function(data){
-		    	if(data=="null"){alert("没有此类用户"); $("#tab").html(""); return;}
+		    	if(data=="null"){alert("没有此类用户"); $("#tab tbody").html(""); return;}
 		    	var jsonObj= JSON.parse(data).list;
 		    	jsonObj = sort(jsonObj);
 		    	
@@ -84,13 +84,18 @@ $(function () {
 		    	$("#tab tbody").html("<tr><td></td><td></td><td></td><td></td></tr>");
 		    	var str="";
 		    	if(jsonObj[0].grade=="admin"){
+		    		gradeName="管理员";
 		    		str="<td><label>撤销管理员？<input type='checkbox' name='adminGrade' value='";
 		    	} else if(jsonObj[0].grade=="user"){
+		    		gradeName="普通用户";
 		    		str="<td><label>设为管理员？<input type='checkbox' name='userGrade' value='";
+		    	} else {
+		    		alert("无法修改本人权限！");
+		    		return;
 		    	}
 		    	$.each(jsonObj,function (i,item) {
 		    		$("#tab tbody").html(function(i,origText){		
-		    			return origText+"<tr><td>"+item.userId+"</td><td>"+item.userName+"</td><td>"+item.grade+"</td><td>"+item.createTime+"</td>"+str+item.userId+"'><label></td></tr>";
+		    			return origText+"<tr class='even'><td>"+item.userId+"</td><td>"+item.userName+"</td><td>"+gradeName+"</td><td>"+item.createTime+"</td>"+str+item.userId+"'><label></td></tr>";
 		    		});
 		    	});
 		    },	    

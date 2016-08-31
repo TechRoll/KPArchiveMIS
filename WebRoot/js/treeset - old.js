@@ -1,48 +1,19 @@
-//保存ul内容
-var saveul = function(){
-	$("#allFile li").removeClass("selected");
-	var htmlcontent = $("#allFile").html().replace(/[\r\n\t]/g,"").trim();
-    
-    $.post("serviet/Saveul",{content:htmlcontent});
-};
-//li绑定选中事件
-var bindli=function(){
-    $("#allFile li").unbind("click");
-    
-    $("#allFile li").bind("click",function(e){
-        e.preventDefault();
-        e.stopPropagation();
-        let $this = $(this);
-        $("#allFile li").removeClass("selected");
-        $(this).addClass("selected");
-   });
-  };
-$(function(){
+
+$(document).ready(function() {
 	var flag=true;
-    var setdrag =  $(".dragtree ul").dragsort({dragSelector: "li", dragBetween: true});
+    //var setdrag =  $(".dragtree ul").dragsort({dragSelector: "li", dragBetween: true});
     // var setdrag =  $(".tree").dragsort({dragSelector: "li", dragBetween: true});
     //$(".dragtree ul").sortable();           //ui排序
         
-    var changecontent = "<span id='edit'>编辑</span><ul class='appendlist' id='appendlist'><li><a href='javascript:;'>添加同级分类</a></li><li><a href='javascript:;'>添加子集分类</a></li></ul><ul class='appendlist' id='editcontent'><li><a herf='javascript:;' id='detele'>删除</a></li><li><a herf='javascript:;' id='rename'>重命名</a></li><li><a herf='javascript:;' id='moveUp'>上移</a></li><li><a herf='javascript:;' id='moveDown'>下移</a></li></ul>";
+    var changecontent = "<ul class='appendlist' id='appendlist'><li><a href='javascript:;'>添加同级分类</a></li><li><a href='javascript:;'>添加子集分类</a></li><li><a herf='javascript:;' id='detele'>删除</a></li><li><a herf='javascript:;' id='rename'>重命名</a></li><li><a herf='javascript:;' id='moveUp'>上移</a></li><li><a herf='javascript:;' id='moveDown'>下移</a></li></ul>";
     $("#changefile").append(changecontent);
     
-    $("#allFile").on("change",function(){
-    	saveul();
-    	});
-    $.get("serviet/Saveul",function(data){
-    	if(data=="")
-    		$("#allFile").html("<h3>请上传文件或添加文件夹<h3>");
-    	else
-    		$("#allFile").html(data);
-    	$(".tree").treemenu();
-    	 bindli();
-    	}
-    );
+ 
     
     
      
     $("#edit").on("click",function(){
-        let $this = $(this);
+        var $this = $(this);
         if(flag){
             $this.html("完成");
             $("#appendlist").hide();
@@ -71,7 +42,7 @@ $(function(){
     
      
     var createli = function(name){
-        let newli = null;
+        var newli = null;
         newli = $("<li class='folder'></li>");
         // newli.addClass("tree-empty ui-sortable-handle file").attr("data-time","");
         // newli.append("<span class='toggler'></span>").append("<a href=\"#\">"+name+"</a>");
@@ -82,7 +53,7 @@ $(function(){
         return newli;
     };
     var addPeer = function(name){
-        let newli = createli(name);
+        var newli = createli(name);
         if(!($(".selected").length === 0)){
           $(newli).appendTo($(".selected").parent());
         }
@@ -97,19 +68,15 @@ $(function(){
      bindli();
     };
     var addChild = function(name){
-        let newli = createli(name);
+        var newli = createli(name);
         if(judgeselect()){
-          if(($(".selected>ul").length===0)){
-        	  if($(".selected").hasClass("folder"))
-        		  $(newli).appendTo($(".selected>ul:eq(0)"));
-        	  else
-        		  $(newli).appendTo($(".selected").parent());
-          }
-          else{
-            // $("<ul></ul>").appendTo($(".selected")).addClass("treemenu ui-sortable").append(newli);
-            // $(".selected").removeClass("tree-empty").addClass("tree-opened");
-            $("<ul></ul>").appendTo($(".selected")).append(newli);
-          }
+    	  if($(".selected").hasClass("folder")){
+    		  $(newli).appendTo($(".selected>ul:eq(0)"));
+    	  }
+    	  else{
+    		  $(newli).appendTo($(".selected").parent());
+    	  }
+          
         }
         $(".tree").treemenuUpdate();
         saveul();
@@ -117,14 +84,17 @@ $(function(){
     };
     // 上移按钮
     $("#moveUp").on("click",function(){
+       if(judgeselect()){
         $(".selected").insertBefore($(".selected").prev());
         saveul();
+       }
     });
     // 下移按钮
     $("#moveDown").on("click",function(){
-        console.log("$(this).index()");
+       if(judgeselect()){
         $(".selected").insertAfter($(".selected").next());
         saveul();
+       }
     });
     // 删除按钮
     $("#detele").on("click",function(){
@@ -149,11 +119,18 @@ $(function(){
         "删除": function() {
           $( this ).dialog( "close" );
           // deteled.push( $(".selected"));                      //删除数组
+          if($(".selected .file").length != 0){
+	          var deteleid=[];
+	          $(".selected .file").each(function(){
+	        	  deteleid.push($(this).attr('data-id'));
+	          });
+	          $.post("servlet/ToSearch",{"arr":deteleid.toString()});
+          }
           $(".selected").remove();
           saveul();
           if($(".tree>li").length===0)
       		$("#allFile").html("<h3>请上传文件或添加文件夹<h3>");
-          // console.log(deteled[0]);
+          //console.log(deteled[0]);
           
         },
         "取消": function() {
@@ -171,9 +148,9 @@ $(function(){
     };
     //重名判断
     var ifrepeat=function(o,name){
-      let haverepeat = false;
+      var haverepeat = false;
       o.find(">li>a").each(function(){
-          let e = $(this);
+          var e = $(this);
           if( e.text() == name.val() ){
             haverepeat=true;
           }
@@ -230,7 +207,7 @@ $(function(){
     }
     /******错误提示*******/
      function updateTips( t ) {
-       let tips = $( ".validateTips" );
+       var tips = $( ".validateTips" );
       tips
         .text( t )
         .addClass( "ui-state-highlight" );
@@ -241,7 +218,14 @@ $(function(){
     /***********重命名**************/
     var renameFn = function(name){
        $(".selected").find("a:eq(0)").text(name);
-       saveul();
+       
+       if(!$(".selected").hasClass("folder")){
+    	   var id = $(".selected .file").attr('data-id');
+    	   $.post('servlet/GetFileInfo', {"name":name,"id":id},function(data){
+    		   $(".selected .file").next().attr('href',data);
+    		   saveul();
+    	   }); 
+       }
     };
     
     
@@ -275,4 +259,5 @@ $(function(){
         }
     });
     };
+	
 });

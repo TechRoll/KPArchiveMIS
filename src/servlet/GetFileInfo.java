@@ -58,7 +58,7 @@ public class GetFileInfo extends HttpServlet {
 			String[] f = OperationFileInfo.getFileInfo(i);
 			if (Integer.parseInt(f[3]) == 0) {
 				str += "{'fileTitle':'" + f[0] + "', 'timePath':'" + f[1]
-						+ "', 'realPath':'" + f[2] + "'}";
+						+ "', 'realPath':'" + f[2] + "', 'id':'" + i +"'}";
 				if (i < start + count - 1) {
 					str += ", ";
 				}
@@ -86,10 +86,21 @@ public class GetFileInfo extends HttpServlet {
 	 * @throws IOException
 	 *             if an error occurred
 	 */
+	/**
+	 * 重命名文件
+	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		doGet(request, response);
+		response.setContentType("text/html;charset=UTF-8");// 这个一定要在定义out之前设置
+		PrintWriter out = response.getWriter();
+		response.setHeader("Cache-Control", "no-cache");
+		request.setCharacterEncoding("utf-8");
+		String filepath = this.getServletConfig().getServletContext().getRealPath("/")+ "userFile";
+		String newname = request.getParameter("name");
+		int nameid = Integer.parseInt( request.getParameter("id"));
+		String path = OperationFileInfo.FileRename(newname,nameid,filepath);
+		out.print("servlet/DownloadFile?filename="+path);
+		
 	}
 
 	/**

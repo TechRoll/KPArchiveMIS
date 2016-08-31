@@ -2,7 +2,8 @@ package servlet;
 
 import java.io.*;
 
-import org.textmining.text.extraction.WordExtractor;
+import org.apache.poi.hwpf.extractor.WordExtractor;
+//import org.textmining.text.extraction.WordExtractor;
 
 public class MyLineNumberReader {
 	private Reader fr;
@@ -90,7 +91,7 @@ class SearchContent {
 		this.fileType = fileType;
 		this.out = out;
 		this.pathlong = pathlong;
-		extractor = new WordExtractor();
+		
 	}
 
 	// 暴露的公共接口，开始在指定的目录中搜索关键字
@@ -98,16 +99,16 @@ class SearchContent {
 		try {
 			// bw=new BufferedWriter(
 			// new FileWriter( "log.txt"));
-
+			
 			f = new File(filename);
-
+			
 			// 搜索关键字的内容
 			listFile(f);
-
+			
 			// 关闭文件流
 			// bw.close();
 
-			System.out.println("搜索完毕，搜索结果已保存在log.txt文件中");
+			//System.out.println("搜索完毕，搜索结果已保存在log.txt文件中");
 		} catch (Exception e) {
 			System.out.println("搜索出错！！！");
 		}
@@ -118,9 +119,9 @@ class SearchContent {
 	 * 通过递归搜索目录，搜索过程分两种情况： 1.如果是目录，则通过递归继续查找目录下的文件
 	 * 2.如果是文件，则先判断是否是fileType类型文件，如果是的话就搜索文件内容
 	 */
-	private void listFile(File f) {
+	private void listFile(File f){
 		File[] files = f.listFiles();
-
+		
 		for (int x = 0; x < files.length; x++) {
 			if (files[x].isDirectory())
 				listFile(files[x]);
@@ -129,6 +130,7 @@ class SearchContent {
 				if (files[x].getName().endsWith(fileType)
 						|| files[x].getName().endsWith("docx")) {
 					FindTxt(files[x]);
+					
 				}
 			}
 		}
@@ -137,16 +139,20 @@ class SearchContent {
 	/*
 	 * 从文件中搜索制定的内容，分下面几步 1.使用自定义的山寨版LineNumberReader类，读取文件的每一行 2.
 	 */
-	private void FindTxt(File f) {
+	private void FindTxt(File f){
 		FileInputStream br = null;
 		String content = "";
-
+		
 		try {
 			br = new FileInputStream(f);
+			
+			extractor = new WordExtractor(br);
+			
 			String s = null;
-			System.out.println("0");
-			s = extractor.extractText(br);
-			System.out.println("1");
+			
+			
+			s = extractor.getText();
+			
 			// 文本行中是否包含制定的字符串
 			if (s.contains(findtxt)) {
 				String absolutepath = f.getAbsolutePath();

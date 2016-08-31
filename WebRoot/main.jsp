@@ -22,42 +22,43 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<!--[if lte IE 8]>
 	<script type="text/javascript" src="scripts/html5.js"></script>
 	<![endif]-->
-
 	<script type="text/javascript" src="js/jquery/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="js/jquery/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="js/uploadify/jquery.uploadify.min.js"></script>
-	
 	<script src="js/jquery.treemenu - change.js" type="text/javascript"></script>
-    <script src="js/jquery.dragsort-0.5.2.min.js"></script>
-	
+	<script src="js/jquery.dragsort-0.5.2.min.js"></script>
 	<title>档案管理</title>
 </head>
 <body>
 
 <header id="hd">
-	<div id="btnFilePanel">
-		<!-- exportData写这些是为了让按钮样式都一样 -->
-		<div class="uploadify">
-			<div id="exportData" class="uploadify-button">
-				<span class="uploadify-button-text">备份数据</span>
-			</div>
+	<div id="hdLeft"></div>
+	<div id="hdRight">
+		<div id="btnFilePanel" style="visibility:hidden;">
+			<div id="exportData" class="uploadify-button uploadify export_icon" title="点击备份数据">备份数据</div>
+			<div id="importData" class="import_icon" title="点击导入数据"></div>
+			<div id="uploadFile" class="muti_upload_icon" title="点击上传文件"></div>
 		</div>
-		<div id="importData"></div>
-		<div id="uploadFile"></div>
-	</div>
-	<div id="hdRight"><!-- 用户名及其相关功能 -->
-    	<!-- 判断登录的是否为超级管理员，是的话则显示按钮 -->
-    	<!--
-    	            未登录的话会显示出错 
-    	 -->
+
     	<% String str=(String)session.getAttribute("grade");%>
     	<% if(str != null) {%>
     	<% if(str.equals("superAdmin")){ %>
-	       <a href="configAdmin.jsp">设置管理员</a>
-		<% }} %>
+	       <a href="configAdmin.jsp" class="user_config_icon" title="点击管理">权限管理</a>
+	       <script src="js/treeset - old.js" type="text/javascript"></script>
+	       <script>
+          var btnFilePanel = document.getElementById('btnFilePanel');
+          btnFilePanel.style.visibility = 'visible';
+        </script>
+		<% }else if(str.equals("admin")){%>
+			<script src="js/treeset - old.js" type="text/javascript"></script>
+			<script>
+          var btnFilePanel = document.getElementById('btnFilePanel');
+          btnFilePanel.style.visibility = 'visible';
+        </script>
+		<%}} %>
 	    <!-- 显示登陆用户名 -->
 	    <a href="upUser.jsp" class="user_icon" title="点击修改"><%= session.getAttribute("userName") %></a>
-        <a href="upPasswd.jsp">修改密码</a>
+        <a href="upPasswd.jsp" class="edit_icon" title="点击修改">修改密码</a>
         <a href="LogOff" class="logOff_icon" title="退出登录">注销</a>
 	</div>
 </header>
@@ -67,7 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    		<div id="tabs">
    			<ul id="tabsList"></ul>
 	   		<div id="contentList">
-   				<iframe src="default.html" frameborder="0" scrolling="no" width="100%" height="100%"></iframe>
+   				
 	   		</div>
 	   	</div>
    	</section>
@@ -79,7 +80,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <input id="masthead-search-term" class="search-term " name="search_query" value="" placeholder="搜索" type="text" />
 	            <a id="searchbt" href="javascript:;"></a>
 	        </form>
-	    </div><!--header end-->
+	    </div>
 	    <div id = "changefile" class="changefile">
 	    
 	    </div>
@@ -130,8 +131,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </div>
 
 <script type="text/javascript" src="js/main.js"></script>
-<script src="js/treeset - old.js" type="text/javascript"></script>
 <script src="js/aside.js" type="text/javascript"></script>
+
+
 
 </body>
 </html>

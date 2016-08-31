@@ -31,8 +31,8 @@ public class Command {
 			stdoutUtil.start();
 			erroroutUtil.start();
 
-			// 让p等待5秒之后销毁，这样就能让命令继续执行下去
-			Thread.sleep(5000);
+			// 让p等待10秒之后销毁，这样就能让命令继续执行下去
+			Thread.sleep(10000);
 			System.out.println("waitFor开始执行");
 			// p.waitFor();
 			p.destroy();

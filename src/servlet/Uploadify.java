@@ -131,20 +131,22 @@ public class Uploadify extends HttpServlet {
 
 						// 将新上传的文件的数据存入数据库
 						// 参数为：原文件路径(用于file字段的存储)、带后缀的文件名、swf时间戳文件名、时间戳路径、原文件路径、文件标题、创建时间、doc/docx文本内容
+						
 						OperationFileInfo.insertFileInfo(fileRealPath1,
 								fileName, newfileName + ".swf", newfolderName
 										+ "/" + newfileName + "/" + fileName,
 								newfolderName + "/" + newfileName + "/"
 										+ newfileName, 0, fileTitle,
 								createTime, textContent);
-						// System.out.println(fileRealPath1);
-						// System.out.println(fileName);
-						// System.out.println(newfileName+".swf");
-						// System.out.println(newfolderName+"/"+newfileName+"/"+fileName);
-						// System.out.println(newfolderName+"/"+newfileName+"/"+newfileName);
-						// System.out.println(fileTitle);
-						// System.out.println(createTime);
-						// System.out.println(textContent);
+						
+//						 System.out.println(fileRealPath1);
+//						 System.out.println(fileName);
+//						 System.out.println(newfileName+".swf");
+//						 System.out.println(newfolderName+"/"+newfileName+"/"+fileName);
+//						 System.out.println(newfolderName+"/"+newfileName+"/"+newfileName);
+//						 System.out.println(fileTitle);
+//						 System.out.println(createTime);
+//						 System.out.println(textContent);
 
 					}
 				}

@@ -28,4 +28,21 @@ $(function () {
 			$("#sub").click();
 		}
 	});
+	
+	
+	//用户注册弹窗
+	$("#register").click(function(){
+		
+		window.dialog = $("#registerPage").dialog({
+			title: "修改密码",
+			width : 425,
+			height : 348,
+			modal : true
+		});
+	//    $("iframe",dialog).attr("scrolling","no");
+		$("iframe",dialog).attr("frameborder","0");
+		$("iframe",dialog).attr("height","100%");
+		$("iframe",dialog).attr("width","100%");
+		$("iframe",dialog).attr("src","register.jsp");
+	});
 });

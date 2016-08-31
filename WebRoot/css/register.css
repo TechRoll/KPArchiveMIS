@@ -1,32 +1,10 @@
 @charset "utf-8";
 /* CSS Document */
 
-body{
-	background:url(images/login-bg-lightgray.png) repeat-x top #F6F6F6;
-	color:#636363;
-}
-
-.register_wrapper,.up_wrapper {
-	position:absolute;
-	left:50%;
-	top:40%;
-	width:548px;
-	height:292px;
-	margin-left:-274px;
-	margin-top:-146px;
-	padding:10px;
-	background-color:#fff;/*--#8BE;---*/
-	border:1px solid #FFF;
-	border-radius: 12px;
-	-moz-border-radius: 12px;
-	-webkit-border-radius: 12px;
-	behavior: url(styles/PIE.htc); /* for IEs that don't support border-radious*/
-}
-
 form{
 	margin-top:20px;
 	position:absolute;
-	left:100px;
+	left:50px;
 	top:32px;
 	z-index: 3;
 }
@@ -92,9 +70,15 @@ hr{
 	color:#444;
 }
 #registerForm span,#upPasswdForm span {
+	display:block;
 	color:#F00;
-	font-size:0.5em;
+	font-size:14px;
 	font-family:微软雅黑;
+}
+#hint span{
+	font-size:12px;
+	padding-left:20px;
+	background:#fff url("images/icons/info-black.png") no-repeat left center;
 }
 
 #heightTr td{

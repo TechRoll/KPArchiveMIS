@@ -18,8 +18,7 @@ public class DownloadFile extends HttpServlet {
 		@SuppressWarnings("deprecation")
 		// 构建返回给用户的文件所在的路径
 		String filepath = request.getRealPath("/") + "userFile/";
-		String filename = new String(request.getParameter("filename"))
-				.toString();
+		String filename = new String(request.getParameter("filename"));
 		String realfilename = filename.substring(24);// 显示给用户的文件名
 
 		System.out.println(realfilename);

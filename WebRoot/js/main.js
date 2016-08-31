@@ -2,6 +2,8 @@
 var tabCount = 0;//用于记录打开过的标签页的总数
 var tabNumber = 0;//用于记录现有的标签页的总数
 var sucnumber=0;
+var isShowDefaule = true;//当前页面显示的是不是首页
+
 //首次打开页面从数据库中获取所有档案
 //allFile();
 
@@ -23,7 +25,12 @@ $(function(){
 	/*
 	 * 文件列表可拖拽
 	 */
-	$( "#allFile" ).sortable();
+	$( "#allFile" ).sortable({
+		distance:10,
+		revert: true,
+		scroll: false,
+		stop:saveul
+		});
     $( "#allFile" ).disableSelection();
 	/*
 	 * 全局title提示
@@ -44,7 +51,8 @@ $(function(){
 	/*
 	 * 列表项双击，添加一个新的标签页
 	 */
-	$('#allFile').on('dblclick', '.file', addTabContent);
+	$('aside').on('dblclick', '.file', addTabContent);
+	$('#contentList').on('dblclick', '.default_file', addTabContent);
 	/*
 	 * 点击标签页的X关闭此标签页
 	 */
@@ -53,9 +61,7 @@ $(function(){
 	 * 返回首页按钮
 	 */
 	$('#homeLink').click(function(){
-		$('#contentList').html('<iframe src="default.html" frameborder="0" scrolling="no" width="100%" height="100%"></iframe>');
-		$('#tabsList').html('');
-		tabCount = 0;
+		defaultPage();
 	});
 	/*
 	 * 点击导出按钮，打开导出数据的弹窗
@@ -125,8 +131,8 @@ $(function(){
 			//上传成功和失败的文件的个数
 			var succ = queueData.uploadsSuccessful;
 			var error =  queueData.uploadsErrored;
-			allFile(succ - sucnumber);
-			sucnumber = succ;
+			showul();
+			defaultPage();//还原数据将页面改为首页
         }
 	});
 	/*
@@ -163,7 +169,12 @@ $(function(){
 			var succ = queueData.uploadsSuccessful;
 			var error =  queueData.uploadsErrored;
 			//新的文件上传成功刷新档案列表
-			allFile();
+			//allFile();
+			allFile(succ-sucnumber);
+			sucnumber = succ;
+			if(isShowDefaule){//如果当前显示的是首页就重新加载一下首页信息
+				defaultPage();
+			}
         }
     });
 	/*
@@ -197,7 +208,8 @@ function delTabContent(event){
     tabs.tabs( "refresh" );
   //如果页面的标签页都被删除就回到欢迎页
     if(tabNumber === 0){
-    	$('#homeLink').click();
+    	isShowDefaule = true;
+    	defaultPage();
     }
 }
 
@@ -208,12 +220,21 @@ function addTabContent(event){
 	if(tabCount === 0){
 		$('#contentList').html('');
 	}
+	$('#tabsList').show();
+	$('#loading').show();
 	tabCount++;
 	tabNumber++;
 	var tabsList = $('#tabsList');
 	var contentList = $('#contentList');
 	//构建要加载到页面的元素节点
-	var tabsHtml = '<li><a href="#tabs-'+tabCount+'">'+event.target.innerHTML+'</a><span title="close">X</span></li>';
+	var tabName = event.target.innerHTML;
+	if(isShowDefaule){
+		tabName = $(tabName).html();
+		if(!tabName){
+      tabName = event.target.innerHTML;
+		}
+	}
+	var tabsHtml = '<li><a href="#tabs-'+tabCount+'">'+tabName+'</a><span title="close">X</span></li>';
 	var contentListHtml = '<div id="tabs-'+tabCount+'"><iframe id="preview'+tabCount+'" src="preview.jsp?id=preview'+tabCount+'" data-path="userFile/'+$(event.target).attr('data-time')+'.swf" frameborder="0" scrolling="no" width="100%" height="100%"></iframe></div>';
 	//添加到页面中
 	tabsList.append(tabsHtml);
@@ -227,6 +248,7 @@ function addTabContent(event){
 	//为新iframe添加load事件
 	$('#preview'+tabCount).load(function(){		
 		$('#loading').hide();
+		isShowDefaule = false;
 	});
 }
 
@@ -261,22 +283,107 @@ function tabsWidth(){
 //}
 function allFile(n){//146行调用了这个方法
 	var fl = $('#allFile');
+	var position = $(".selected");
 	$.get('servlet/GetFileInfo', function(data){
 		 var objs=eval("("+data+")");
 		 var str = '';
 		 for(var i = objs.length-n; i < objs.length; i++){
-			 str += '<li ><a class="file" title="双击打开" data-time="'+objs[i]['timePath']+'">'+objs[i]['fileTitle']+'</a><a href="servlet/DownloadFile?filename='+objs[i]['realPath']+'" class="downfile"></a></li>';
+			 var type = objs[i].realPath.substring(objs[i].realPath.indexOf('.'));
+			 str += '<li';
+			 if(type === '.doc' || type === '.docx'){
+				 str += ' class="filedoc"';
+			 }else if(type === '.pdf'){
+				 str += ' class="filepdf"';
+			 }else if(type === '.png'){
+				 str += ' class="filepng"';
+			 }else if(type === '.jpg' || type === '.jpeg'){
+				 str += ' class="filejpg"';
+			 }
+			 str += '><a class="file" title="双击打开" data-id='+objs[i]['id']+' data-time="'+objs[i]['timePath']+'">'+objs[i]['fileTitle']+'</a><a title="点击下载" href="servlet/DownloadFile?filename='+objs[i]['realPath']+'" class="downfile"></a></li>';
 		 }
 		 if($(".tree>li").length===0)
 			 fl.html(str);
-     	 else if($(".selected").length === 0)
-     		fl.append(str);
-     	 else
-     		$(".selected>ul").append(str);
+     	 else if(position.length === 0)
+     		 fl.append(str);	
+     	 else if(position.hasClass("folder")){
+     		 position.find("ul:eq(0)").append(str);
+     	 }else
+     		position.parent().append(str)
 		 
 		 $(".tree").treemenuUpdate();
 		 saveul();
 		 bindli();
 	});
-	
 }
+
+defaultPage();
+//让内容区显示默认的页面
+function defaultPage(){
+	$('#tabsList').html('');
+	$('#tabsList').hide();
+	tabCount = 0;
+	$('#contentList').html('');
+	$('#loading').show();
+	$.get('servlet/GetFileInfo', function(data){
+		 var objs=eval("("+data+")");
+		 var str = '<h2 style="font-size:40px;text-align:left;padding-bottom:20px;padding-left:20px;">最新档案<h2/>';
+		 var len = objs.length > 20 ? 20 : objs.length;
+		 for(var i = len-1; i >= 0; i--){
+			 var type = objs[i].realPath.substring(objs[i].realPath.indexOf('.'));
+			 if(type === '.doc' || type === '.docx'){
+				 str += '<li class="default_li default_doc"><a class="default_file" title="双击打开" data-id='+objs[i]['id']+' data-time="'+objs[i]['timePath']+'"><span>'+objs[i]['fileTitle']+'</span></a><a href="servlet/DownloadFile?filename='+objs[i]['realPath']+'" class="default_df" title="点击下载"></a></li>';
+			 }else if(type === '.pdf'){
+				 str += '<li class="default_li default_pdf"><a class="default_file" title="双击打开" data-id='+objs[i]['id']+' data-time="'+objs[i]['timePath']+'"><span>'+objs[i]['fileTitle']+'</span></a><a href="servlet/DownloadFile?filename='+objs[i]['realPath']+'" class="default_df" title="点击下载"></a></li>';
+			 }else if(type === '.png'){
+				 str += '<li class="default_li default_png"><a class="default_file" title="双击打开" data-id='+objs[i]['id']+' data-time="'+objs[i]['timePath']+'"><span>'+objs[i]['fileTitle']+'</span></a><a href="servlet/DownloadFile?filename='+objs[i]['realPath']+'" class="default_df" title="点击下载"></a></li>';
+			 }else if(type === '.jpg' || type === '.jpeg'){
+				 str += '<li class="default_li default_jpg"><a class="default_file" title="双击打开" data-id='+objs[i]['id']+' data-time="'+objs[i]['timePath']+'"><span>'+objs[i]['fileTitle']+'</span></a><a href="servlet/DownloadFile?filename='+objs[i]['realPath']+'" class="default_df" title="点击下载"></a></li>';
+			 }
+		 }
+		 $('#loading').hide();
+		 $('#contentList').html(str);
+	});
+}
+
+
+//用户管理的模态显示
+$(function(){     
+	var config = $("#config");
+	
+	config.click(function(){
+		$("#contentList").html('<iframe id="authorPage" name="contentFrame" src="connfigAdmin.jsp" frameborder="0" scrolling="no" width="100%" height="100%"></iframe>');
+	});
+	
+		
+	//修改用户名弹窗
+	$("#name").click(function(){
+		
+		window.dialog = $("#upData").dialog({
+			title: "修改用户名",
+			width : 450,
+			height : 348,
+			modal : true
+		});
+	//    $("iframe",dialog).attr("scrolling","no");
+		$("iframe",dialog).attr("frameborder","0");
+		$("iframe",dialog).attr("height","100%");
+		$("iframe",dialog).attr("width","100%");
+		$("iframe",dialog).attr("src","upUser.jsp");
+	});
+	
+	//修改密码弹窗
+	$("#upPasswd").click(function(){
+		
+		window.dialog = $("#upData").dialog({
+			title: "修改密码",
+			width : 450,
+			height : 348,
+			modal : true
+		});
+	//    $("iframe",dialog).attr("scrolling","no");
+		$("iframe",dialog).attr("frameborder","0");
+		$("iframe",dialog).attr("height","100%");
+		$("iframe",dialog).attr("width","100%");
+		$("iframe",dialog).attr("src","upPasswd.jsp");
+	});
+});
