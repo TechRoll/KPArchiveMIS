@@ -43,7 +43,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	<% String str=(String)session.getAttribute("grade");%>
     	<% if(str != null) {%>
     	<% if(str.equals("superAdmin")){ %>
-	       <a href="configAdmin.jsp" class="user_config_icon" title="点击管理">权限管理</a>
+	      <a id="config" href="#" class="user_config_icon" title="点击管理">权限管理</a>
 	       <script src="js/treeset - old.js" type="text/javascript"></script>
 	       <script>
           var btnFilePanel = document.getElementById('btnFilePanel');
@@ -57,8 +57,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </script>
 		<%}} %>
 	    <!-- 显示登陆用户名 -->
-	    <a href="upUser.jsp" class="user_icon" title="点击修改"><%= session.getAttribute("userName") %></a>
-        <a href="upPasswd.jsp" class="edit_icon" title="点击修改">修改密码</a>
+	    <a id="upName"href="javscript:;" class="user_icon" title="点击修改"><%= session.getAttribute("userName") %>(<%= session.getAttribute("userId")%>)</a>
+        <a id="upPasswd" href="javscript:;" class="edit_icon" title="点击修改">修改密码</a>
         <a href="LogOff" class="logOff_icon" title="退出登录">注销</a>
 	</div>
 </header>
@@ -128,6 +128,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!--警告框-->
 <div id="warning-confirm" title="提示" class="alertconfim">
     <p><span class="ui-icon ui-icon-alert" ></span>请先选中一个文件或目录</p>
+</div>
+
+
+<!--修改密码和姓名-->
+<div id="upData" title="修改资料" style="display:none">
+	<iframe></iframe>
 </div>
 
 <script type="text/javascript" src="js/main.js"></script>

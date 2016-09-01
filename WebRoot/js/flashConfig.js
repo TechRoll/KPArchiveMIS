@@ -1,7 +1,8 @@
 ﻿/*
  * 宽和高设置为当前iframe的宽和高，SwfFile设置为当前iframe的data-path属性的值，便可通过data-path属性显示不同的swf文件
  */
-flashConfig( $("#"+getQueryStr('id'), window.parent.document).attr("data-path"), $(window).width(), $(window).height() );
+ var str = $("#"+getQueryStr('id'), window.parent.document).attr("data-path");
+flashConfig( str, $(window).width(), $(window).height() );
 /*
  * 功能：配置页面flash的显示
  * 参数：要显示的文件的路径、宽、高
@@ -84,3 +85,10 @@ function getQueryStr(sArgName){
 	}
 	return retval;
 }
+
+$(window).resize(function(){
+    $('object').attr({
+      'width':$(window).width(),
+      'height':$(window).height()
+    });
+});

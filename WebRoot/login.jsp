@@ -15,9 +15,11 @@
 	<![endif]-->
 <link rel="shortcut icon" href="favicon.ico" />
 <link type="text/css" href="css/global.css" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" href="css/jquery-ui.min.css" />
 <link type="text/css" href="css/login.css" rel="stylesheet" />
 
 <script type="text/javascript" src="js/jquery/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquery/jquery-ui.min.js"></script>
 <script src="js/user/login.js"></script>
 <title>登录档案管理系统</title>
 </head>
@@ -41,13 +43,18 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2"><span id="errorPut"></span><a
-						href="register.jsp">注册？</a><input type="button" id="sub"
+					<td colspan="2"><span id="errorPut"></span><a id="register"
+						href="#">注册？</a><input type="button" id="sub"
 						class="button round_rect" value="登录" />
 					</td>
 				</tr>
 			</table>
 		</form>
+	</div
+	
+	<!--用户注册弹窗-->
+	<div id="registerPage" style="display:none;">
+		<iframe></iframe>
 	</div>
 
 </body>

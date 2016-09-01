@@ -32,7 +32,7 @@ $(document).ready(function() {
 						   if(true){
 							   alert("修改成功！"); 
 							   window.parent.$("#upData").dialog('close'); 
-							   window.parent.document.getElementById("name").innerHTML=$("#userName").val()+"("+$("#userId").text()+")";
+							   window.parent.document.getElementById("upName").innerHTML=$("#userName").val()+"("+$("#userId").text()+")";
 						   } else {
 							   alert("尚未登录！");
 							   window.parent.$("#upData").dialog('close');

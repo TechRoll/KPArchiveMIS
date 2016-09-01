@@ -24,13 +24,7 @@
 <body>
 	<!-- flash是否可用 -->
 	<div id="flashContent" style="display:none">
-		<p>请安装flash 10.0.0以上的版本</p>
-		<script type="text/javascript">
-			var pageHost = ((document.location.protocol == "https:") ? "https://"
-					: "http://");
-			document
-					.write("<a href='http://www.adobe.com/go/getflashplayer'><img src='" + pageHost + "www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>");
-		</script>
+    
 	</div>
 </body>
 </html>

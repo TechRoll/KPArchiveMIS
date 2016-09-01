@@ -217,9 +217,6 @@ function delTabContent(event){
  * 添加一个新的标签页
  */
 function addTabContent(event){
-	if(tabCount === 0){
-		$('#contentList').html('');
-	}
 	$('#tabsList').show();
 	$('#loading').show();
 	tabCount++;
@@ -228,11 +225,21 @@ function addTabContent(event){
 	var contentList = $('#contentList');
 	//构建要加载到页面的元素节点
 	var tabName = event.target.innerHTML;
+	console.log(event.target);
+	if(!tabName){//如果取不到说明是IE
+    var d = $(event.target).attr('aria-describedby');
+    console.log(d);
+    tabName = $('a[aria-describedby="'+d+'"]').html();
+    console.log(tabName);
+	}
 	if(isShowDefaule){
 		tabName = $(tabName).html();
 		if(!tabName){
       tabName = event.target.innerHTML;
 		}
+	}
+	if(tabCount === 0){
+		$('#contentList').html('');
 	}
 	var tabsHtml = '<li><a href="#tabs-'+tabCount+'">'+tabName+'</a><span title="close">X</span></li>';
 	var contentListHtml = '<div id="tabs-'+tabCount+'"><iframe id="preview'+tabCount+'" src="preview.jsp?id=preview'+tabCount+'" data-path="userFile/'+$(event.target).attr('data-time')+'.swf" frameborder="0" scrolling="no" width="100%" height="100%"></iframe></div>';
@@ -249,6 +256,7 @@ function addTabContent(event){
 	$('#preview'+tabCount).load(function(){		
 		$('#loading').hide();
 		isShowDefaule = false;
+		$('#contentList').css({'top':'32px'});
 	});
 }
 
@@ -322,11 +330,14 @@ function defaultPage(){
 	$('#tabsList').html('');
 	$('#tabsList').hide();
 	tabCount = 0;
+	tabNumber = 0;
+	isShowDefaule = true;
 	$('#contentList').html('');
 	$('#loading').show();
 	$.get('servlet/GetFileInfo', function(data){
 		 var objs=eval("("+data+")");
-		 var str = '<h2 style="font-size:40px;text-align:left;padding-bottom:20px;padding-left:20px;">最新档案<h2/>';
+		 var str = '<h3 style="font-size:25px;font-weight:blod;text-align:left;padding:20px;">最新档案<h3/>';
+		 $('#contentList').css({'top':0});
 		 var len = objs.length > 20 ? 20 : objs.length;
 		 for(var i = len-1; i >= 0; i--){
 			 var type = objs[i].realPath.substring(objs[i].realPath.indexOf('.'));
@@ -347,16 +358,27 @@ function defaultPage(){
 
 
 //用户管理的模态显示
-$(function(){     
-	var config = $("#config");
+$(function(){
 	
-	config.click(function(){
-		$("#contentList").html('<iframe id="authorPage" name="contentFrame" src="connfigAdmin.jsp" frameborder="0" scrolling="no" width="100%" height="100%"></iframe>');
+	//权限管理弹窗
+	$("#config").click(function(){
+		
+		window.dialog = $("#upData").dialog({
+			title: "权限管理",
+			width : 800,
+			height : 440,
+			modal : true
+		});
+	//    $("iframe",dialog).attr("scrolling","no");
+		$("iframe",dialog).attr("frameborder","0");
+		$("iframe",dialog).attr("height","100%");
+		$("iframe",dialog).attr("width","100%");
+		$("iframe",dialog).attr("src","configAdmin.jsp");
 	});
 	
 		
 	//修改用户名弹窗
-	$("#name").click(function(){
+	$("#upName").click(function(){
 		
 		window.dialog = $("#upData").dialog({
 			title: "修改用户名",

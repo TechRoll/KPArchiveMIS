@@ -19,8 +19,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<title>密码修改</title>
 </head>
 <body>
-	<div class="has_shadow up_wrapper">
-	    <a href="main.jsp">返回首页</a>
      	<form id="upPasswdForm" name="upPasswdForm" class="upForm" action="UpPasswd" method="post">
      	    <table>
      	        <tr>
@@ -29,11 +27,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       			</tr>
       			<tr>
 			        <td><label for="password">新密码：</label></td>
-			        <td><input class="round_rect" id="password" name="password" type="password" value=''/><span id="pwdLength">*密码为8-15位数字、字母的组合</span></td>
+			        <td><input class="round_rect" id="password" name="password" type="password" value=''/><span id="pwdLength" style="display:none;">*密码为8-15位数字、字母的组合</span></td>
       			</tr>
       			<tr>
 			        <td><label for="passwordAgin">密码确认：</label></td>
-			        <td><input class="round_rect" id="passwordAgin" name="passwordAgin" type="password" value=''/><span id="pwdEqual">*两次密码不匹配</span></td>
+			        <td><input class="round_rect" id="passwordAgin" name="passwordAgin" type="password" value=''/><span id="pwdEqual" style="display:none;">*两次密码不匹配</span></td>
       			</tr>               
       			<tr>
 			        <td></td>
@@ -41,7 +39,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       			</tr>
       		</table>
       	</form>
-  	</div>
   	
   	<script type="text/javascript" src="js/jquery/jquery-1.9.1.min.js"></script>
   	<script type="text/javascript" src="js/user/upPasswd.js"></script>

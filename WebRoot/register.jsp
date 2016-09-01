@@ -21,8 +21,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<title>注册档案管理系统</title>
 </head>
 <body>
-	<div class="has_shadow register_wrapper">
-	    <span id="formHead">注册</span><a href="login.jsp" id="login">返回继续登录</a><hr />
+	<div>
 		<form id="registerForm" name="registerForm" action="Register" method="post">
 			<table>
 				<tr>

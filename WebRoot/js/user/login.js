@@ -34,7 +34,7 @@ $(function () {
 	$("#register").click(function(){
 		
 		window.dialog = $("#registerPage").dialog({
-			title: "修改密码",
+			title: "用户注册",
 			width : 425,
 			height : 348,
 			modal : true

@@ -21,8 +21,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<script type="text/javascript" src="js/user/upUser.js"></script>
 </head>
 <body>
-	<div class="has_shadow up_wrapper">
-	    <a href="main.jsp" class="back_icon">返回首页</a>
+	<div>
 	    <form id="upUserForm" name="upUserForm" class="upForm" action="UpUser" method="post">
      	    <table>
      	        <tr>
@@ -35,10 +34,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			        	<!-- 输入框默认为原用户名 -->
 			        	<input class="round_rect" id="userName" name="userName" type="text" value=<%=session.getAttribute("userName") %> />
 			        	<!-- 输入格式错误的警告 -->
-			        	<span id="uNameError">*输入格式不正确！</span>
+			        	<span id="uNameError" style="display:none;">*格式错误！</span>
 			        </td>
       			</tr>
-      			<tr id="hint">
+      			<tr id="hint" style="display:none;">
       				<td></td>
       				<td><span>用户名为2~12位字符，支持中文、英文、数字和下划线</span></td>
       			</tr>              
